@@ -1,0 +1,13 @@
+@(entries: List[Entry])
+
+@main("Lolled") {
+
+    <h1>Some entries</h1>
+
+    <ul>
+        @entries.map { entry =>
+            <li>@entry.name</li>
+        }
+    </ul>
+
+}
