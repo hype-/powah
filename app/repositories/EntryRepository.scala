@@ -2,11 +2,10 @@ package repositories
 
 import com.google.inject.Inject
 import models.{Entry, Entries}
-import play.api.Play.current
-import play.api.db.slick.DB
-import play.api.db.slick.Config.driver.simple._
+import services.DbService
+import services.DbService.driver._
 
-class EntryRepository @Inject()(val db: DB) {
+class EntryRepository @Inject()(val db: DbService) {
   def findAll: List[Entry] = {
     db.withSession { implicit session =>
       Query(Entries).list
