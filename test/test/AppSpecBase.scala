@@ -21,13 +21,17 @@ trait AppSpecBase extends Specification {
   }
   
   protected def withTestApp[T](block: => T): T = {
-    running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-      play.api.db.slick.DB.withSession { s =>
-        _session = Some(s)
-        try {
-          block
-        } finally {
-          _session = None
+    if (_session.isDefined) {
+      block  // Permit nesting withTestApp calls, though I'm not sure why one would want to.
+    } else {
+      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+        play.api.db.slick.DB.withSession { s =>
+          _session = Some(s)
+          try {
+            block
+          } finally {
+            _session = None
+          }
         }
       }
     }
