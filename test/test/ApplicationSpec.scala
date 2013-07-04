@@ -17,45 +17,41 @@ import models.{Entry, Entries}
  * You can mock out a whole application including requests, plugins etc.
  * For more information, consult the wiki.
  */
-class ApplicationSpec extends Specification {
+class ApplicationSpec extends AppSpecBase {
   "Application" should {
     "send 404 on a bad request" in {
-      running(FakeApplication()) {
+      withTestApp {
         route(FakeRequest(GET, "/boum")) must beNone
       }
     }
 
     "front page should list entries" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-        play.api.db.slick.DB.withSession { implicit session =>
-          Entries.insert(Entry(None, "xoo entry"))
+      withTestApp {
+        Entries.insert(Entry(None, "xoo entry"))
 
-          val home = route(FakeRequest(GET, "/")).get
+        val home = route(FakeRequest(GET, "/")).get
 
-          status(home) must equalTo(OK)
-          contentType(home) must beSome.which(_ === "text/html")
-          contentAsString(home) must contain ("xoo entry")
-        }
+        status(home) must equalTo(OK)
+        contentType(home) must beSome.which(_ === "text/html")
+        contentAsString(home) must contain ("xoo entry")
       }
     }
 
     "add an entry" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-        play.api.db.slick.DB.withSession { implicit session =>
-          val Some(result) = route(FakeRequest(
-            POST,
-            "/entries",
-            FakeHeaders(Seq(CONTENT_TYPE -> Seq("application/json"))),
-            Json.parse("""{"name": "some name"}""")
-          ))
+      withTestApp {
+        val Some(result) = route(FakeRequest(
+          POST,
+          "/entries",
+          FakeHeaders(Seq(CONTENT_TYPE -> Seq("application/json"))),
+          Json.parse("""{"name": "some name"}""")
+        ))
 
-          assertJsonResponse(result, CREATED)
+        assertJsonResponse(result, CREATED)
 
-          val entry = assertEntryWasCreated()
+        val entry = assertEntryWasCreated()
 
-          header(LOCATION, result) must beSome
-            .which(_ === "/entries/%d".format(entry.id.get)) // TODO: Absolute URL
-        }
+        header(LOCATION, result) must beSome
+          .which(_ === "/entries/%d".format(entry.id.get)) // TODO: Absolute URL
       }
     }
 
@@ -65,13 +61,11 @@ class ApplicationSpec extends Specification {
     }
 
     def assertEntryWasCreated(): Entry = {
-      play.api.db.slick.DB.withSession { implicit session =>
-        val entry = Query(Entries).first
+      val entry = Query(Entries).first
 
-        entry.name must equalTo("some name")
+      entry.name must equalTo("some name")
 
-        entry
-      }
+      entry
     }
   }
 }
