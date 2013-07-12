@@ -1,13 +1,11 @@
-@(entries: List[Entry])
-
 @main("Lolled") {
+    <section ng-controller="EntryCtrl">
+        <h1>A list of entries</h1>
 
-    <h1>Some entries</h1>
-
-    <ul>
-        @entries.map { entry =>
-            <li>@entry.name</li>
-        }
-    </ul>
-
+        <ul>
+            <li ng-repeat="entry in entries">
+                {{ entry.name }}
+            </li>
+        </ul>
+    </section>
 }

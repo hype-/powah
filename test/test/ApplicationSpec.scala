@@ -1,16 +1,14 @@
 package test
 
-import org.specs2.mutable._
-
 import play.api.test._
 import play.api.test.Helpers._
 import play.api.libs.json.Json
 import play.api.test.FakeHeaders
-import play.api.test.FakeApplication
 import play.api.mvc.Result
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
 import models.{Entry, Entries}
+import formats.EntryFormatter._
 
 /**
  * Add your spec here.
@@ -25,15 +23,34 @@ class ApplicationSpec extends AppSpecBase {
       }
     }
 
-    "front page should list entries" in {
+    "show front page" in {
       withTestApp {
-        Entries.insert(Entry(None, "xoo entry"))
+        val result = route(FakeRequest(GET, "/")).get
 
-        val home = route(FakeRequest(GET, "/")).get
+        status(result) must equalTo(OK)
+        contentType(result) must beSome.which(_ === "text/html")
+        contentAsString(result) must contain ("A list of entries")
+      }
+    }
 
-        status(home) must equalTo(OK)
-        contentType(home) must beSome.which(_ === "text/html")
-        contentAsString(home) must contain ("xoo entry")
+    "get entries" in {
+      withTestApp {
+        play.api.db.slick.DB.withSession { implicit session =>
+          Entries.insert(Entry(None, "xoo entry"))
+          val entry = Query(Entries).first
+
+          val result = route(FakeRequest(
+            GET,
+            "/entries"
+          ).withHeaders(CONTENT_TYPE -> "application/json")).get
+
+          status(result) must equalTo(OK)
+          contentType(result) must beSome.which(_ === "application/json")
+
+          val resultEntry = (Json.parse(contentAsString(result)) \ "data")(0).as[Entry]
+
+          resultEntry must equalTo(entry)
+        }
       }
     }
 
