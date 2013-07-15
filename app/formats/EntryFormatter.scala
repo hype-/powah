@@ -6,7 +6,7 @@ import play.api.libs.json._
 object EntryFormatter {
   implicit object EntryFormat extends Format[Entry] {
     def reads(json: JsValue) = JsSuccess(Entry(
-      (json \ "id").asOpt[Int],
+      (json \ "id").asOpt[Long],
       (json \ "name").as[String]
     ))
 
