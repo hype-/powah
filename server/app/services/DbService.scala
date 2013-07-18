@@ -7,9 +7,9 @@ import scala.slick.session.Session
 
 class DbService @Inject()(db: DB) {
   private val currentApp = play.api.Play.current
-  
+
   def openDatabase(): Database = db.database("default")(currentApp)
-  
+
   def withSession[A](f: (Session) => A): A = {
     openDatabase().withSession(f)
   }
