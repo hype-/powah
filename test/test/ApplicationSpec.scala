@@ -6,7 +6,6 @@ import play.api.libs.json.Json
 import play.api.test.FakeHeaders
 import play.api.mvc.Result
 import play.api.db.slick.Config.driver.simple._
-import play.api.Play.current
 import models.{Entry, Entries}
 import formats.EntryFormatter._
 
@@ -17,59 +16,49 @@ import formats.EntryFormatter._
  */
 class ApplicationSpec extends AppSpecBase {
   "Application" should {
-    "send 404 on a bad request" in {
-      withTestApp {
-        route(FakeRequest(GET, "/boum")) must beNone
-      }
+    "send 404 on a bad request" in testApp {
+      route(FakeRequest(GET, "/boum")) must beNone
     }
 
-    "show front page" in {
-      withTestApp {
-        val result = route(FakeRequest(GET, "/")).get
+    "show front page" in testApp {
+      val result = route(FakeRequest(GET, "/")).get
 
-        status(result) must equalTo(OK)
-        contentType(result) must beSome.which(_ === "text/html")
-        contentAsString(result) must contain ("A list of entries")
-      }
+      status(result) must equalTo(OK)
+      contentType(result) must beSome.which(_ === "text/html")
+      contentAsString(result) must contain ("A list of entries")
     }
 
-    "get entries" in {
-      withTestApp {
-        play.api.db.slick.DB.withSession { implicit session =>
-          Entries.forInsert.insert("xoo entry")
-          val entry = Query(Entries).first
+    "get entries" in testApp {
+      Entries.forInsert.insert("xoo entry")
+      val entry = Query(Entries).first
 
-          val result = route(FakeRequest(
-            GET,
-            "/entries"
-          ).withHeaders(CONTENT_TYPE -> "application/json")).get
+      val result = route(FakeRequest(
+        GET,
+        "/entries"
+      ).withHeaders(CONTENT_TYPE -> "application/json")).get
 
-          status(result) must equalTo(OK)
-          contentType(result) must beSome.which(_ === "application/json")
+      status(result) must equalTo(OK)
+      contentType(result) must beSome.which(_ === "application/json")
 
-          val resultEntry = (Json.parse(contentAsString(result)) \ "data")(0).as[Entry]
+      val resultEntry = (Json.parse(contentAsString(result)) \ "data")(0).as[Entry]
 
-          resultEntry must equalTo(entry)
-        }
-      }
+      resultEntry must equalTo(entry)
     }
 
-    "add an entry" in {
-      withTestApp {
-        val Some(result) = route(FakeRequest(
-          POST,
-          "/entries",
-          FakeHeaders(Seq(CONTENT_TYPE -> Seq("application/json"))),
-          Json.parse("""{"name": "some name"}""")
-        ))
+    "add an entry" in testApp {
+      val Some(result) = route(FakeRequest(
+        POST,
+        "/entries",
+        FakeHeaders(Seq(CONTENT_TYPE -> Seq("application/json"))),
+        Json.parse("""{"name": "some name"}""")
+      ))
 
-        assertJsonResponse(result, CREATED)
+      assertJsonResponse(result, CREATED)
 
-        val entry = assertEntryWasCreated()
+      val entry = assertEntryWasCreated()
 
-        header(LOCATION, result) must beSome
-          .which(_ === "/entries/%d".format(entry.id.get)) // TODO: Absolute URL
-      }
+      header(LOCATION, result) must beSome
+        .which(_ === "/entries/%d".format(entry.id.get)) // TODO: Absolute URL
     }
 
     def assertJsonResponse(result: Result, responseCode: Int) {

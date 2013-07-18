@@ -17,13 +17,13 @@ trait AppSpecBase extends Specification {
   protected implicit def session = {
     _session match {
       case Some(s) => s
-      case None => throw new IllegalStateException("No DB session. Did you forget to use withTestApp?")
+      case None => throw new IllegalStateException("No DB session. Did you forget to use testApp?")
     }
   }
   
-  protected def withTestApp[T](block: => T): T = {
+  protected def testApp[T](block: => T): T = {
     if (_session.isDefined) {
-      block  // Permit nesting withTestApp calls, though I'm not sure why one would want to.
+      block  // Permit nesting testApp calls, though I'm not sure why one would want to.
     } else {
       running(FakeApplication(additionalConfiguration = testDatabase)) {
         play.api.db.slick.DB.withSession { s =>
