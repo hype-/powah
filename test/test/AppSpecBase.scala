@@ -1,8 +1,9 @@
 package test
 
 import org.specs2.mutable._
-import org.specs2.execute.AsResult
 import play.api.Play.current
+import models.Entries
+import com.typesafe.config.ConfigFactory
 
 trait AppSpecBase extends Specification {
   self: Specification =>
@@ -24,16 +25,32 @@ trait AppSpecBase extends Specification {
     if (_session.isDefined) {
       block  // Permit nesting withTestApp calls, though I'm not sure why one would want to.
     } else {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+      running(FakeApplication(additionalConfiguration = testDatabase)) {
         play.api.db.slick.DB.withSession { s =>
           _session = Some(s)
           try {
+            createTables(s)
             block
           } finally {
+            dropTables(s)
             _session = None
           }
         }
       }
     }
+  }
+
+  private def testDatabase = {
+    Map(
+      "db.default.url" -> ConfigFactory.load.getString("db.default.url")
+    )
+  }
+
+  private def createTables(s: Session) = {
+    Entries.ddl.create(s)
+  }
+
+  private def dropTables(s: Session) = {
+    Entries.ddl.drop(s)
   }
 }

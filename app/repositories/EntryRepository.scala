@@ -15,7 +15,7 @@ class EntryRepository @Inject()(val db: DbService) {
   def addEntry(name: String): Entry = {
     db.withSession { implicit session =>
       val entry = Entry(None, name)
-      val newId = Entries.autoInc.insert(entry)
+      val newId = Entries.forInsert.insert(name)
       entry.copy(id = Some(newId))
     }
   }

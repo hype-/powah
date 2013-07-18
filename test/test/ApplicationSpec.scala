@@ -36,7 +36,7 @@ class ApplicationSpec extends AppSpecBase {
     "get entries" in {
       withTestApp {
         play.api.db.slick.DB.withSession { implicit session =>
-          Entries.insert(Entry(None, "xoo entry"))
+          Entries.forInsert.insert("xoo entry")
           val entry = Query(Entries).first
 
           val result = route(FakeRequest(
