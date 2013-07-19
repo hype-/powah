@@ -1,12 +1,15 @@
-package test
+package testhelpers
 
 import org.specs2.mutable._
 import play.api.Play.current
 import models.Entries
 import com.typesafe.config.ConfigFactory
+import play.api.db.slick.Config.driver.simple.Session
+import play.api.db.slick.Config.driver.simple.ddlToDDLInvoker
+import play.api.test.FakeApplication
+import play.api.test.Helpers.running
 
 trait AppSpecBase extends Specification {
-  self: Specification =>
   
   // Importing here will benefit subclasses too
   import play.api.test._
@@ -22,27 +25,32 @@ trait AppSpecBase extends Specification {
   }
   
   protected def testApp[T](block: => T): T = {
+    running(FakeApplication(additionalConfiguration = testDatabaseConfig)) {
+      withTestDb {
+        block
+      }
+    }
+  }
+  
+  protected def withTestDb[T](block: => T): T = {
     if (_session.isDefined) {
       block  // Permit nesting testApp calls, though I'm not sure why one would want to.
     } else {
-      running(FakeApplication(additionalConfiguration = testDatabase)) {
-        play.api.db.slick.DB.withSession { s =>
-          _session = Some(s)
-          try {
-            createTables(s)
-            block
-          } finally {
-            dropTables(s)
-            _session = None
-          }
+      play.api.db.slick.DB.withSession { s =>
+        _session = Some(s)
+        try {
+          TestDb.clearBeforeTest(s)
+          block
+        } finally {
+          _session = None
         }
       }
     }
   }
 
-  private def testDatabase = {
+  protected def testDatabaseConfig = {
     Map(
-      "db.default.url" -> ConfigFactory.load.getString("db.default.url")
+      "db.default.url" -> TestDb.url
     )
   }
 
