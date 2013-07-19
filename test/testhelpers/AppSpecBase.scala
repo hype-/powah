@@ -1,9 +1,13 @@
-package test
+package testhelpers
 
 import org.specs2.mutable._
 import play.api.Play.current
 import models.Entries
 import com.typesafe.config.ConfigFactory
+import play.api.db.slick.Config.driver.simple.Session
+import play.api.db.slick.Config.driver.simple.ddlToDDLInvoker
+import play.api.test.FakeApplication
+import play.api.test.Helpers.running
 
 trait AppSpecBase extends Specification {
   self: Specification =>

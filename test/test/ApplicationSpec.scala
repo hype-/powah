@@ -8,6 +8,7 @@ import play.api.mvc.Result
 import play.api.db.slick.Config.driver.simple._
 import models.{Entry, Entries}
 import formats.EntryFormatter._
+import testhelpers.AppSpecBase
 
 /**
  * Add your spec here.
