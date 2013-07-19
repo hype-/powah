@@ -13,7 +13,7 @@ class IntegrationSpec extends Specification {
   "ApplicationController" should {
     "work from within a browser" in {
       running(TestServer(3333), HTMLUNIT) { browser =>
-        browser.goTo("http://localhost:8080/")
+        browser.goTo("http://localhost:3333/")
 
         browser.pageSource must contain("A list of entries")
       }
