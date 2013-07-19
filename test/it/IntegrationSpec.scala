@@ -1,21 +1,25 @@
 package it
 
 import org.specs2.mutable._
-
 import play.api.test._
 import play.api.test.Helpers._
+import testhelpers.ItBase
 
-/**
- * add your integration spec here.
- * An integration test will fire up a whole play application in a real (or headless) browser
- */
-class IntegrationSpec extends Specification {
-  "ApplicationController" should {
-    "work from within a browser" in {
-      running(TestServer(3333), FIREFOX) { browser =>
-        browser.goTo("http://localhost:3333/")
+class IntegrationSpec extends ItBase {
+  "The application" should {
+    "show the title on its home page" in itEnv {
+      browser.goTo(homePage)
 
-        browser.pageSource must contain("A list of entries")
+      browser.pageSource must contain("A list of entries")
+    }
+    
+    "allow adding entries" in itEnv {
+      browser.goTo(homePage)
+      
+      browser.fill("input[type=\"text\"]").`with`("trololoo")
+      browser.click("input[type=\"submit\"]")
+      browser.waitUntil {
+        browser.findFirst("li").getText().trim() must equalTo ("trololoo")
       }
     }
   }

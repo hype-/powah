@@ -10,11 +10,6 @@ import models.{Entry, Entries}
 import formats.EntryFormatter._
 import testhelpers.AppSpecBase
 
-/**
- * Add your spec here.
- * You can mock out a whole application including requests, plugins etc.
- * For more information, consult the wiki.
- */
 class ApplicationSpec extends AppSpecBase {
   "Application" should {
     "send 404 on a bad request" in testApp {
