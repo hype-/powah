@@ -53,12 +53,4 @@ trait AppSpecBase extends Specification {
       "db.default.url" -> TestDb.url
     )
   }
-
-  private def createTables(s: Session) = {
-    Entries.ddl.create(s)
-  }
-
-  private def dropTables(s: Session) = {
-    Entries.ddl.drop(s)
-  }
 }
