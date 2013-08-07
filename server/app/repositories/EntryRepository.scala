@@ -1,7 +1,7 @@
 package repositories
 
 import com.google.inject.Inject
-import models.{Entry, Entries}
+import models.{EntryInput, Entry, Entries, User}
 import services.DbService
 import services.DbService.driver._
 
@@ -12,11 +12,12 @@ class EntryRepository @Inject()(val db: DbService) {
     }
   }
 
-  def addEntry(name: String): Entry = {
+  def addEntry(name: String, user: User): Entry = {
     db.withSession { implicit session =>
-      val entry = Entry(None, name)
-      val newId = Entries.forInsert.insert(name)
-      entry.copy(id = Some(newId))
+      val userId = user.id.get
+      val id = Entries.forInsert.insert(EntryInput(name, userId))
+
+      Entry(id, name, userId)
     }
   }
 }

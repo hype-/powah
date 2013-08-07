@@ -24,18 +24,19 @@ trait TestDb {
   
   def dropAllTables(s: Session) = {
     // We need to eventually worry about the correct drop order or temporarily disable FK constraints.
-    for (m <- allModels) {
+    for (m <- allModels.reverse) {
       s.conn.createStatement().execute("DROP TABLE IF EXISTS \"" + m.tableName + "\"")
     }
   }
   
   def truncateAllTables(s: Session) = {
     for (m <- allModels) {
-      s.conn.createStatement().execute("TRUNCATE \"" + m.tableName + "\"")
+      s.conn.createStatement().execute("TRUNCATE \"" + m.tableName + "\" CASCADE")
     }
   }
   
   def allModels = Seq(
+    Users,
     Entries
   )
 }

@@ -1,17 +1,17 @@
 package formats
 
-import models.Entry
+import models.EntryOutput
 import play.api.libs.json._
 
 object EntryFormatter {
-  implicit object EntryFormat extends Format[Entry] {
-    def reads(json: JsValue) = JsSuccess(Entry(
-      (json \ "id").asOpt[Long],
+  implicit object EntryFormat extends Format[EntryOutput] {
+    def reads(json: JsValue) = JsSuccess(EntryOutput(
+      (json \ "id").as[Long],
       (json \ "name").as[String]
     ))
 
-    def writes(entry: Entry) = JsObject(Seq(
-      "id" -> JsNumber(entry.id.get),
+    def writes(entry: EntryOutput) = JsObject(Seq(
+      "id" -> JsNumber(entry.id),
       "name" -> JsString(entry.name)
     ))
   }

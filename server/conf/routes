@@ -5,6 +5,9 @@
 # Home page
 GET     /                           @controllers.ApplicationController.html(file="../client/dist/index.html")
 
+# Authentication
+POST    /login                      @controllers.AuthenticationController.login
+
 # Entries
 GET     /entries                    @controllers.EntryController.getEntries
 POST    /entries                    @controllers.EntryController.addEntry

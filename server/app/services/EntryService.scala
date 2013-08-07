@@ -1,11 +1,12 @@
 package services
 
-import models.Entry
+import models.{EntryOutput, Entry, User}
 import repositories.EntryRepository
 import com.google.inject.Inject
 
 class EntryService @Inject()(entryRepository: EntryRepository) {
-  def getEntries: List[Entry] = entryRepository.findAll
+  def getEntries: List[EntryOutput] = entryRepository.findAll.map(_.toOutput)
 
-  def addEntry(name: String): Entry = entryRepository.addEntry(name)
+  def addEntry(name: String, user: User): Entry =
+    entryRepository.addEntry(name, user)
 }

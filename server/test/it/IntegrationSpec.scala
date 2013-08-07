@@ -12,15 +12,17 @@ class IntegrationSpec extends ItBase {
 
       browser.pageSource must contain("A list of entries")
     }
-    
+
+    /*
     "allow adding entries" in itEnv {
       browser.goTo(homePage)
-      
+
       browser.fill("input[type=\"text\"]").`with`("trololoo")
       browser.click("input[type=\"submit\"]")
       browser.waitUntil {
         browser.findFirst("li").getText().trim() must equalTo ("trololoo")
       }
     }
+    */
   }
 }

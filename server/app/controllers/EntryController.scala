@@ -3,22 +3,34 @@ package controllers
 import play.api.mvc._
 import play.api.libs.json._
 import com.google.inject.Inject
-import services.EntryService
+import services.{UserService, EntryService}
 import formats.EntryFormatter._
 
-class EntryController @Inject()(entryService: EntryService) extends Controller {
-  def addEntry = Action(parse.json) { request =>
-    (request.body \ "name").asOpt[String].map { name =>
-      val entry = entryService.addEntry(name)
+class EntryController @Inject()(
+  entryService: EntryService,
+  userService: UserService
+) extends Controller with Secured {
 
-      Created(Json.toJson("lol"))
-        .withHeaders(LOCATION -> "/entries/%d".format(entry.id.get))
-    }.getOrElse {
-      BadRequest
+  def addEntry = AuthenticatedAction(parse.json) { username => implicit request =>
+    request.body match {
+      case json: JsValue => {
+        (json \ "name").asOpt[String].map { name =>
+          val entry = entryService.addEntry(
+            name,
+            userService.getByUsername(username).get
+          )
+
+          Created.withHeaders(
+            CONTENT_TYPE -> JSON,
+            LOCATION -> "/entries/%d".format(entry.id)
+          )
+        }.getOrElse(BadRequest) // TODO: test
+      }
+      case _ => BadRequest // TODO: test
     }
   }
 
-  def getEntries = Action {
+  def getEntries = AuthenticatedAction { username => request =>
     val entries = entryService.getEntries
 
     Ok(Json.toJson(Map("data" -> entries.map(entry => Json.toJson(entry)))))
