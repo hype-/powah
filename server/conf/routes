@@ -3,13 +3,13 @@
 # ~~~~
 
 # Home page
-GET     /                           @controllers.ApplicationController.html(file="../client/dist/index.html")
+GET     /                           @powah.commonmodule.ApplicationController.html(file="../client/dist/index.html")
 
 # Authentication
-POST    /login                      @controllers.AuthenticationController.login
+POST    /login                      @powah.usermodule.AuthenticationController.login
 
 # Entries
-GET     /entries                    @controllers.EntryController.getEntries
-POST    /entries                    @controllers.EntryController.addEntry
+GET     /entries                    @powah.entrymodule.EntryController.getEntries
+POST    /entries                    @powah.entrymodule.EntryController.addEntry
 
 GET     /$file<.*\.(js|css)$>       controllers.ExternalAssets.at(path="../client/dist", file)

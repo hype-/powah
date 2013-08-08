@@ -1,11 +1,11 @@
-package controllers
+package powah.usermodule
 
 import play.api.mvc._
 import play.api.libs.json._
 import com.google.inject.Inject
-import services.UserService
-import models.UsernamePasswordInput
-import formats.UsernamePasswordInputDeserializer._
+import powah.user._
+import powah.user.UsernamePasswordInputDeserializer._
+import powah.commonmodule.Secured
 
 class AuthenticationController @Inject()(
   userService: UserService

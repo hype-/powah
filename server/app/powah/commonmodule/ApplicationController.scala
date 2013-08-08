@@ -1,4 +1,4 @@
-package controllers
+package powah.commonmodule
 
 import play.api.mvc._
 import java.io.File
@@ -13,7 +13,7 @@ trait Secured {
    * Redirect to front page if the user is not authenticated.
    */
   private def onUnauthenticated(request: RequestHeader) =
-    Results.Redirect(routes.ApplicationController.html)
+    Results.Redirect(powah.commonmodule.routes.ApplicationController.html)
 
   /**
    * Action for authenticated users.

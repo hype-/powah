@@ -1,8 +1,6 @@
-package services
+package powah.user
 
 import com.google.inject.Inject
-import repositories.UserRepository
-import models.{UsernamePasswordInput, User}
 
 class UserService @Inject()(userRepository: UserRepository) {
   def getByUsername(username: String): Option[User] =

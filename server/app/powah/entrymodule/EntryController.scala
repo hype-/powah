@@ -1,10 +1,12 @@
-package controllers
+package powah.entrymodule
 
 import play.api.mvc._
 import play.api.libs.json._
 import com.google.inject.Inject
-import services.{UserService, EntryService}
-import formats.EntryFormatter._
+import powah.entry._
+import powah.entry.EntryFormatter._
+import powah.user.UserService
+import powah.commonmodule.Secured
 
 class EntryController @Inject()(
   entryService: EntryService,

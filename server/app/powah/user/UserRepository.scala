@@ -1,9 +1,8 @@
-package repositories
+package powah.user
 
 import com.google.inject.Inject
-import models.{Users, User}
-import services.DbService
-import services.DbService.driver._
+import powah.common.DbService
+import DbService.driver._
 
 class UserRepository @Inject()(val db: DbService) {
   def findByUsername(username: String): Option[User] = {

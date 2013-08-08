@@ -1,9 +1,10 @@
 package testhelpers
 
-import models._
 import play.api.db.slick.Config.driver.simple._
 import com.typesafe.config.ConfigFactory
 import java.sql.SQLException
+import powah.user.Users
+import powah.entry.Entries
 
 trait TestDb {
   private var isInitialized = false

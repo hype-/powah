@@ -1,8 +1,7 @@
-package services
+package powah.entry
 
-import models.{EntryOutput, Entry, User}
-import repositories.EntryRepository
 import com.google.inject.Inject
+import powah.user.User
 
 class EntryService @Inject()(entryRepository: EntryRepository) {
   def getEntries: List[EntryOutput] = entryRepository.findAll.map(_.toOutput)

@@ -1,4 +1,4 @@
-package models
+package powah.user
 
 import play.api.db.slick.Config.driver.simple._
 

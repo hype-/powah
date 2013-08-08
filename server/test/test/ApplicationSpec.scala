@@ -5,8 +5,9 @@ import play.api.test.Helpers._
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.db.slick.Config.driver.simple._
-import models._
 import testhelpers.AppSpecBase
+import powah.user.Users
+import powah.entry.{Entries, EntryInput, Entry}
 
 class ApplicationSpec extends AppSpecBase {
   val TEST_USER_USERNAME = "test@example.com"

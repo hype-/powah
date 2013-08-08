@@ -1,6 +1,7 @@
-package models
+package powah.entry
 
 import play.api.db.slick.Config.driver.simple._
+import powah.user.Users
 
 case class EntryOutput(id: Long, name: String)
 

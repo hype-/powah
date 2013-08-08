@@ -1,4 +1,4 @@
-package services
+package powah.common
 
 import scala.slick.session.Database
 import play.api.db.slick.DB

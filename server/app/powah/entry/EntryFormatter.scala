@@ -1,6 +1,5 @@
-package formats
+package powah.entry
 
-import models.EntryOutput
 import play.api.libs.json._
 
 object EntryFormatter {

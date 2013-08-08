@@ -1,9 +1,9 @@
-package repositories
+package powah.entry
 
 import com.google.inject.Inject
-import models.{EntryInput, Entry, Entries, User}
-import services.DbService
-import services.DbService.driver._
+import powah.common.DbService
+import DbService.driver._
+import powah.user.User
 
 class EntryRepository @Inject()(val db: DbService) {
   def findAll: List[Entry] = {
