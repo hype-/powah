@@ -12,7 +12,7 @@ class EntryRepository @Inject()(val db: DbService) {
     }
   }
 
-  def addEntry(name: String, user: User): Entry = {
+  def add(name: String, user: User): Entry = {
     db.withSession { implicit session =>
       val userId = user.id.get
       val id = Entries.forInsert.insert(EntryInput(name, userId))
