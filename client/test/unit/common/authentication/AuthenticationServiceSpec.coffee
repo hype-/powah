@@ -1,9 +1,9 @@
 describe 'authentication service', ->
   authenticationService = undefined
 
-  beforeEach(module('services.AuthenticationService'))
+  beforeEach(module('powah'))
   beforeEach(inject ($injector) ->
-    authenticationService = $injector.get('authenticationService')
+    authenticationService = $injector.get('AuthenticationService')
   )
 
   it 'exists', ->

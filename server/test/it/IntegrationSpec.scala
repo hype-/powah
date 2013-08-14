@@ -7,10 +7,10 @@ import testhelpers.ItBase
 
 class IntegrationSpec extends ItBase {
   "The application" should {
-    "show the title on its home page" in itEnv {
+    "show Login on its home page" in itEnv {
       browser.goTo(homePage)
 
-      browser.pageSource must contain("A list of entries")
+      browser.pageSource must contain("Login")
     }
 
     /*

@@ -1,6 +1,10 @@
 "use strict"
 
-app = angular.module('powah', [])
+app = angular.module('powah', ['templates.app'])
+
+app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
+  $routeProvider.when('/home', {templateUrl: 'home/home.tpl.html', controller: 'HomeCtrl'})
+])
 
 app.controller('EntryCtrl', ['$scope', '$http', ($scope, $http) ->
   $scope.entries = []

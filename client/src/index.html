@@ -8,19 +8,16 @@
     <script type="text/javascript" src="/<%= grunt.config.get('pkg.name') %>.js"></script>
   </head>
   <body>
-    <section ng-controller="EntryCtrl">
-      <h1>A list of entries</h1>
+    <section ng-controller="AuthenticationCtrl">
+      <h1>Login</h1>
 
-      <form ng-submit="addEntry()">
-        <input type="text" ng-model="entryName" />
-        <input type="submit" value="add" />
+      <form ng-submit="login()">
+        <input name="username" type="text" ng-model="credentials.username" />
+        <input name="password" type="password" ng-model="credentials.password" />
+        <input type="submit" value="login" />
       </form>
-
-      <ul>
-        <li ng-repeat="entry in entries">
-          {{ entry.name }}
-        </li>
-      </ul>
     </section>
+
+    <section ng-view></section>
   </body>
 </html>
