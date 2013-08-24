@@ -2,5 +2,9 @@
 
 app = angular.module('powah')
 
-app.controller('HomeCtrl', ['$scope', ($scope) ->
-])
+app.controller(
+  'HomeCtrl',
+  ['$scope', 'SessionService', ($scope, sessionService) ->
+    $scope.user = sessionService.getUser()
+  ]
+)

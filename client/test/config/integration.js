@@ -3,26 +3,24 @@ basePath = '../..';
 
 // list of files / patterns to load in the browser
 files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  'vendor/angular/angular.js',
-  'test/vendor/angular/angular-mocks.js',
-  'src/**/*.js',
-  'test/unit/**/*.js',
-  'dist/templates/**/*.js'
+  ANGULAR_SCENARIO,
+  ANGULAR_SCENARIO_ADAPTER,
+  'test/integration/**/*.js',
 ];
+
+// frameworks = ['jasmine'];
 
 // use dots reporter, as travis terminal does not support escaping sequences
 // possible values: 'dots' || 'progress'
-reporters = 'progress';
+// reporters = 'progress';
 
 // these are default values, just to show available options
 
 // web server port
-port = 8089;
+port = 8090;
 
 // cli runner port
-runnerPort = 9109;
+runnerPort = 9110;
 
 urlRoot = '/__test/';
 
@@ -51,3 +49,7 @@ browsers = ['Chrome'];
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit
 singleRun = true;
+
+proxies = {
+  '/': 'http://localhost:8081/'
+};

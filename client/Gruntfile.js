@@ -11,10 +11,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-coffee');
 
   // Default task.
-  grunt.registerTask('default', ['jshint','build','karma:unit']);
+  grunt.registerTask('default', ['jshint', 'build', 'karma:unit', 'karma:integration']);
   grunt.registerTask('build', ['clean', 'coffee', 'html2js', 'concat', 'recess:build', 'copy:assets']);
-  grunt.registerTask('release', ['clean', 'coffee', 'html2js', 'uglify', 'jshint', 'karma:unit', 'concat:index', 'recess:min', 'copy:assets']);
-  grunt.registerTask('test-watch', ['karma:watch']);
+  grunt.registerTask('release', ['clean', 'coffee', 'html2js', 'uglify', 'jshint', 'karma:unit', 'karma:integration', 'concat:index', 'recess:min', 'copy:assets']);
+  grunt.registerTask('unit-test-watch', ['karma:unitWatch']);
+  grunt.registerTask('integration-test-watch', ['karma:integrationWatch']);
 
   // Print a timestamp (useful for when watching)
   grunt.registerTask('timestamp', function() {
@@ -36,10 +37,10 @@ module.exports = function (grunt) {
     'Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %> */\n',
     src: {
       js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js'],
-      coffee: ['src/**/*.coffee', '<%= distdir %>/templates/**/*.coffee', 'test/unit/**/*.coffee'],
+      coffee: ['src/**/*.coffee', '<%= distdir %>/templates/**/*.coffee', 'test/unit/**/*.coffee', 'test/integration/**/*.coffee'],
       specs: ['test/**/*.spec.js'],
       scenarios: ['test/**/*.scenario.js'],
-      html: ['src/index.html'],
+      html: ['src/index.html', 'test/integration/index.html'],
       tpl: {
         app: ['src/app/**/*.tpl.html'],
         common: ['src/common/**/*.tpl.html']
@@ -55,7 +56,9 @@ module.exports = function (grunt) {
     },
     karma: {
       unit: { options: karmaConfig('test/config/unit.js') },
-      watch: { options: karmaConfig('test/config/unit.js', { singleRun: false, autoWatch: true }) }
+      integration: { options: karmaConfig('test/config/integration.js') },
+      unitWatch: { options: karmaConfig('test/config/unit.js', { singleRun: false, autoWatch: true }) },
+      integrationWatch: { options: karmaConfig('test/config/integration.js', { singleRun: false, autoWatch: true }) }
     },
     html2js: {
       app: {
@@ -93,6 +96,21 @@ module.exports = function (grunt) {
       angular: {
         src: ['vendor/angular/angular.js'],
         dest: '<%= distdir %>/angular.js'
+      },
+      testApp: {
+        src: ['test/integration/app.js'],
+        dest: '<%= distdir %>/test-powah.js'
+      },
+      testIndex: {
+        src: ['test/integration/index.html'],
+        dest: '<%= distdir %>/test-index.html',
+        options: {
+          process: true
+        }
+      },
+      testAngularMocks: {
+        src: ['test/vendor/angular/angular-mocks.js'],
+        dest: '<%= distdir %>/angular-mocks.js'
       }
     },
     uglify: {
@@ -132,11 +150,18 @@ module.exports = function (grunt) {
         src: 'src/**/*.coffee',
         dest: 'src/app/app.js'
       },
-      test: {
+      unitTest: {
         expand: true,
         cwd: 'test/unit',
         src: ['*.coffee', '**/*.coffee'],
         dest: 'test/unit',
+        ext: '.js'
+      },
+      integrationTest: {
+        expand: true,
+        cwd: 'test/integration',
+        src: ['*.coffee', '**/*.coffee'],
+        dest: 'test/integration',
         ext: '.js'
       }
     },

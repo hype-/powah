@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="powahTest">
+  <head>
+    <title>Powah</title>
+    <link rel="stylesheet" type="text/css" href="/<%= grunt.config.get('pkg.name') %>.css"/>
+    <script type="text/javascript" src="/angular.js"></script>
+    <script type="text/javascript" src="/<%= grunt.config.get('pkg.name') %>.js"></script>
+
+    <script type="text/javascript" src="/angular-mocks.js"></script>
+    <script type="text/javascript" src="/test-powah.js"></script>
+  </head>
+  <body>
+    <section ng-controller="AuthenticationCtrl">
+      <h1>Login</h1>
+
+      <form ng-submit="login()">
+        <input name="username" type="text" ng-model="credentials.username" />
+        <input name="password" type="password" ng-model="credentials.password" />
+        <input type="submit" value="login" />
+      </form>
+    </section>
+
+    <section ng-view></section>
+  </body>
+</html>
