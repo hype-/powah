@@ -3,4 +3,5 @@ dist
 src/app/*.js
 src/app/**/*.js
 test/unit/**/*.js
+test/integration/**/*.js
 libpeerconnection.log
