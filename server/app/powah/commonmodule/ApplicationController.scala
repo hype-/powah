@@ -2,6 +2,7 @@ package powah.commonmodule
 
 import play.api.mvc._
 import java.io.File
+import com.typesafe.config.ConfigFactory
 
 trait Secured {
   /**
@@ -13,7 +14,7 @@ trait Secured {
    * Redirect to front page if the user is not authenticated.
    */
   private def onUnauthenticated(request: RequestHeader) =
-    Results.Redirect(powah.commonmodule.routes.ApplicationController.html)
+    Results.Redirect(powah.commonmodule.routes.ApplicationController.index)
 
   /**
    * Action for authenticated users.
@@ -36,6 +37,8 @@ trait Secured {
 }
 
 class ApplicationController() extends Controller {
+  def index = html(ConfigFactory.load.getString("client_index"))
+
   def html(file: String) = Action {
     val f = new File(file)
 

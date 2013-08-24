@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           @powah.commonmodule.ApplicationController.html(file="../client/dist/index.html")
+GET     /                           @powah.commonmodule.ApplicationController.index
 
 # Authentication
 POST    /login                      @powah.usermodule.AuthenticationController.login
