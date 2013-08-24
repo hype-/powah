@@ -5,6 +5,7 @@ import play.api.test.Helpers._
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.db.slick.Config.driver.simple._
+import com.github.t3hnar.bcrypt._
 import testhelpers.AppSpecBase
 import powah.user.Users
 import powah.entry.{Entries, EntryInput, Entry}
@@ -95,7 +96,7 @@ class ApplicationSpec extends AppSpecBase {
     }
 
     def createTestUser: Long =
-      Users.forInsert.insert(TEST_USER_USERNAME, TEST_USER_PASSWORD)
+      Users.forInsert.insert(TEST_USER_USERNAME, TEST_USER_PASSWORD.bcrypt)
 
     "add an entry" in testApp {
       createTestUser
