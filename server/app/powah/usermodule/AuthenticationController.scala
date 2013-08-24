@@ -8,13 +8,13 @@ import powah.user.UsernamePasswordInputDeserializer._
 import powah.commonmodule.Secured
 
 class AuthenticationController @Inject()(
-  userService: UserService
+  authenticationService: AuthenticationService
 ) extends Controller with Secured {
 
   def login = Action(parse.json) { request =>
     request.body.validate[UsernamePasswordInput].map {
       case input: UsernamePasswordInput => {
-        if (userService.authenticate(input)) {
+        if (authenticationService.authenticate(input)) {
           Ok
             .withHeaders(CONTENT_TYPE -> JSON)
             .withSession("username" -> input.username)
