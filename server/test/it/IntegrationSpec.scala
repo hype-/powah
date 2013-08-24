@@ -5,6 +5,7 @@ import play.api.test._
 import play.api.test.Helpers._
 import testhelpers.ItBase
 
+/*
 class IntegrationSpec extends ItBase {
   "The application" should {
     "show Login on its home page" in itEnv {
@@ -26,3 +27,4 @@ class IntegrationSpec extends ItBase {
     */
   }
 }
+*/
