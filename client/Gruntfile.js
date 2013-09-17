@@ -93,9 +93,9 @@ module.exports = function (grunt) {
           process: true
         }
       },
-      angular: {
-        src: ['vendor/angular/angular.js'],
-        dest: '<%= distdir %>/angular.js'
+      vendor: {
+        src: ['vendor/angular/angular.js', 'vendor/angular/angular-cookies.js', 'vendor/underscore/underscore.js'],
+        dest: '<%= distdir %>/vendor.js'
       },
       testApp: {
         src: ['test/integration/app.js'],
@@ -121,9 +121,9 @@ module.exports = function (grunt) {
         src: ['<%= src.js %>'],
         dest: '<%= distdir %>/<%= pkg.name %>.js'
       },
-      angular: {
-        src: ['<%= concat.angular.src %>'],
-        dest: '<%= distdir %>/angular.js'
+      vendor: {
+        src: ['<%= concat.vendor.src %>'],
+        dest: '<%= distdir %>/vendor.js'
       }
     },
     recess: {

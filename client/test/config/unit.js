@@ -6,6 +6,8 @@ files = [
   JASMINE,
   JASMINE_ADAPTER,
   'vendor/angular/angular.js',
+  'vendor/angular/angular-cookies.js',
+  'vendor/underscore/underscore.js',
   'test/vendor/angular/angular-mocks.js',
   'src/**/*.js',
   'test/unit/**/*.js',

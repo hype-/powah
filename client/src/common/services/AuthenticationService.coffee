@@ -4,7 +4,7 @@ app = angular.module('powah')
 
 app.factory(
   'AuthenticationService',
-  ['$http', '$location', 'SessionService', ($http, $location, sessionService) ->
+  ['$http', '$location', 'SessionService', 'CookieParser', ($http, $location, sessionService, cookieParser) ->
     {
       login: (credentials) ->
         $http.post('/login', angular.toJson(credentials))
@@ -13,6 +13,12 @@ app.factory(
             $location.path('/home')
           .error ->
             $location.path('/')
+
+      tryToAuthenticateWithCurrentUser: ->
+        currentUser = cookieParser.get('username')
+
+        if !sessionService.hasUser() && currentUser
+          sessionService.setUsername(currentUser)
     }
   ]
 )

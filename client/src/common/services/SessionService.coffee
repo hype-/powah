@@ -12,6 +12,7 @@ app.factory(
     {
       setUsername: (username) -> user.username = username
       getUser: -> user
+      hasUser: -> user.username != null
     }
   ]
 )
