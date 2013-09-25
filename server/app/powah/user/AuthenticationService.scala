@@ -8,8 +8,6 @@ class AuthenticationService @Inject()(
   passwordEncoder: PasswordEncoder
 ) {
   def authenticate(input: UsernamePasswordInput): Boolean =
-    userRepository.findByUsername(input.username) match {
-      case Some(user) => passwordEncoder.verify(input.password, user.password)
-      case None => false
-    }
+    userRepository.findByUsername(input.username)
+      .exists(user => passwordEncoder.verify(input.password, user.password))
 }
