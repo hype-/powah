@@ -11,3 +11,8 @@ describe 'authentication', ->
     element(':submit').click()
 
     expect(element('h2').text()).toBe('Welcome, lussen')
+
+  it 'redirects to front page when trying to access an url anonymously', ->
+    browser().navigateTo('/#/home')
+
+    expect(browser().location().path()).toBe('/')

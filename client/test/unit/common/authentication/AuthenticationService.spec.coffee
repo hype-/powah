@@ -71,3 +71,18 @@ describe 'authentication service', ->
     authenticationService.tryToAuthenticateWithCurrentUser()
 
     expect(sessionService.getUser().username).toBe('foo')
+
+  it 'is logged in when SessionService has user', ->
+    authenticationService = undefined
+    sessionService = undefined
+
+    inject ($injector) ->
+      $httpBackend = $injector.get('$httpBackend')
+      sessionService = $injector.get('SessionService')
+      authenticationService = $injector.get('AuthenticationService')
+
+    expect(authenticationService.isLoggedIn()).toBe(false)
+
+    sessionService.setUsername('foo')
+
+    expect(authenticationService.isLoggedIn()).toBe(true)

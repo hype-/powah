@@ -6,8 +6,15 @@ app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationPro
   $routeProvider.when('/home', {templateUrl: 'home/home.tpl.html', controller: 'HomeCtrl'})
 ])
 
-app.run(['$rootScope', 'AuthenticationService', ($rootScope, authenticationService) ->
-  authenticationService.tryToAuthenticateWithCurrentUser()
+app.run([
+  '$rootScope', '$location', 'AuthenticationService',
+  ($rootScope, $location, authenticationService) ->
+    authenticationService.tryToAuthenticateWithCurrentUser()
+
+    $rootScope.$on('$routeChangeStart', (event, next, current) ->
+      if (!authenticationService.isLoggedIn())
+        $location.path('/')
+    )
 ])
 
 app.controller('EntryCtrl', ['$scope', '$http', ($scope, $http) ->
