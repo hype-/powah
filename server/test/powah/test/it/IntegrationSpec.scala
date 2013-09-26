@@ -1,9 +1,9 @@
-package it
+package powah.test.it
 
 import org.specs2.mutable._
 import play.api.test._
 import play.api.test.Helpers._
-import testhelpers.ItBase
+import powah.test.helpers.ItBase
 
 /*
 class IntegrationSpec extends ItBase {
