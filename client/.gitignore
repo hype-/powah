@@ -5,3 +5,6 @@ src/app/**/*.js
 test/unit/**/*.js
 test/integration/**/*.js
 libpeerconnection.log
+.idea
+*.sublime-project
+*.sublime-workspace
