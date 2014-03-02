@@ -1,1 +1,5 @@
 <h2>Welcome, {{ user.username }}</h2>
+
+<div>
+  <a ng-href="/#/days/{{ currentDate|date:'yyyy-MM-dd' }}/exercises">Today's exercises</a>
+</div>

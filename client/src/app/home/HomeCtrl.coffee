@@ -6,5 +6,6 @@ app.controller(
   'HomeCtrl',
   ['$scope', 'SessionService', ($scope, sessionService) ->
     $scope.user = sessionService.getUser()
+    $scope.currentDate = new Date()
   ]
 )

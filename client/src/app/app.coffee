@@ -4,6 +4,11 @@ app = angular.module('powah', ['ngCookies', 'templates.app'])
 
 app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
   $routeProvider.when('/home', {templateUrl: 'home/home.tpl.html', controller: 'HomeCtrl'})
+
+  $routeProvider.when(
+    '/days/:date/exercises',
+    {templateUrl: 'exercise/exercise.tpl.html', controller: 'ExerciseCtrl'}
+  )
 ])
 
 app.run([
@@ -15,18 +20,4 @@ app.run([
       if (!authenticationService.isLoggedIn())
         $location.path('/')
     )
-])
-
-app.controller('EntryCtrl', ['$scope', '$http', ($scope, $http) ->
-  $scope.entries = []
-
-  $http.get('entries').success (response) ->
-    $scope.entries = response.data
-
-  $scope.addEntry = ->
-    entry = {name: $scope.entryName}
-
-    $scope.entries.push(entry)
-    $scope.entryName = ''
-    $http.post('entries', angular.toJson(entry))
 ])

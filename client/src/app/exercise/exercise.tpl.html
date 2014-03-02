@@ -1,0 +1,28 @@
+<h2>Welcome, {{ user.username }}</h2>
+
+<div class="rep-sets">
+  <ul ng-repeat="exercise in exercises">
+    <li>
+      {{ exercise.name }}
+      <ul ng-repeat="repSet in exercise.repSets">
+        <li>{{ repSet.weight }} kg x {{ repSet.reps }}</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<form role="form" class="form-horizontal add-rep-set" ng-submit="addRepSet()">
+  <div class="form-group">
+    <label for="rep-set-exercise-name">Exercise</label>
+    <input name="exercise-name" type="text" id="rep-set-exercise-name" ng-model="newRepSet.exerciseName" />
+  </div>
+  <div class="form-group">
+    <label for="rep-set-weight">Weight</label>
+    <input name="weight" type="number" id="rep-set-weight" ng-model="newRepSet.weight" />
+  </div>
+  <div class="form-group">
+    <label for="rep-set-reps">Reps</label>
+    <input name="reps" type="number" id="rep-set-reps" ng-model="newRepSet.reps" />
+  </div>
+  <button type="submit" class="btn btn-default">Add rep set</button>
+</form>

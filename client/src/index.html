@@ -3,21 +3,28 @@
 <html lang="en" ng-app="powah">
   <head>
     <title>Powah</title>
-    <link rel="stylesheet" type="text/css" href="/<%= grunt.config.get('pkg.name') %>.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/<%= grunt.config.get('pkg.name') %>.css"/>
     <script type="text/javascript" src="/vendor.js"></script>
     <script type="text/javascript" src="/<%= grunt.config.get('pkg.name') %>.js"></script>
   </head>
   <body>
-    <section ng-controller="AuthenticationCtrl">
+    <section class="container" ng-controller="AuthenticationCtrl">
       <h1>Login</h1>
 
-      <form ng-submit="login()">
-        <input name="username" type="text" ng-model="credentials.username" />
-        <input name="password" type="password" ng-model="credentials.password" />
-        <input type="submit" value="login" />
+      <form role="form" class="form-inline" ng-submit="login()">
+        <div class="form-group">
+          <label for="credentials-username">Username</label>
+          <input name="username" type="text" id="credentials-username" ng-model="credentials.username" />
+        </div>
+        <div class="form-group">
+          <label for="credentials-password">Password</label>
+          <input name="password" type="password" id="credentials-password" ng-model="credentials.password" />
+        </div>
+        <button type="submit" class="btn btn-default">Login</button>
       </form>
     </section>
 
-    <section ng-view></section>
+    <section class="container" ng-view></section>
   </body>
 </html>

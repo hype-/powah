@@ -167,16 +167,16 @@ module.exports = function (grunt) {
     },
     watch: {
       all: {
-        files: ['<%= src.coffee %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        files: ['Gruntfile.js', '<%= src.coffee %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
         tasks: ['default','timestamp']
       },
       build: {
-        files: ['<%= src.coffee %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        files: ['Gruntfile.js', '<%= src.coffee %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
         tasks: ['build','timestamp']
       }
     },
     jshint: {
-      files: ['gruntFile.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
+      files: ['Gruntfile.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
       options: {
         curly: true,
         eqeqeq: true,
