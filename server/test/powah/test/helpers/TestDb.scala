@@ -2,7 +2,7 @@ package powah.test.helpers
 
 import com.typesafe.config.ConfigFactory
 import play.api.db.slick.Config.driver.simple._
-import powah.entry.Entries
+import powah.exercise.{Exercises, RepSets}
 import powah.user.Users
 
 trait TestDb {
@@ -36,8 +36,9 @@ trait TestDb {
   }
 
   def allModels = Seq(
+    Exercises,
     Users,
-    Entries
+    RepSets
   )
 }
 

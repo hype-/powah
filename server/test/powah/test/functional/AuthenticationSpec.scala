@@ -44,7 +44,7 @@ class AuthenticationSpec extends AppSpecBase {
     }
 
     "redirect to login page without authentication" in testApp {
-      val result = route(FakeRequest(GET, "/entries")).get
+      val result = route(FakeRequest(GET, "/exercises")).get
 
       status(result) must equalTo(SEE_OTHER)
       redirectLocation(result) must beSome("/")

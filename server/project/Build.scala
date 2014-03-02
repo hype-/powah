@@ -14,7 +14,8 @@ object ApplicationBuild extends Build {
     "com.typesafe.play" %% "play-slick" % "0.3.3",
     "postgresql" % "postgresql" % "9.1-901.jdbc4",
     "org.seleniumhq.selenium" % "selenium-server" % "2.33.0" % "test",
-    "com.github.t3hnar" % "scala-bcrypt_2.10" % "2.2"
+    "com.github.t3hnar" % "scala-bcrypt_2.10" % "2.2",
+    "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

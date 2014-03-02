@@ -4,9 +4,10 @@ import com.github.t3hnar.bcrypt._
 import org.specs2.mutable._
 import play.api.Play.current
 import play.api.mvc.Result
-import powah.user.Users
+import powah.user.User
+import powah.test.builders.Builders
 
-trait AppSpecBase extends Specification {
+trait AppSpecBase extends Specification with Builders with Finders {
   // Importing here will benefit subclasses too
 
   import play.api.test.Helpers._
@@ -19,6 +20,8 @@ trait AppSpecBase extends Specification {
       case None => throw new IllegalStateException("No DB session. Did you forget to use testApp?")
     }
   }
+
+  def dbSession = session
 
   protected def testApp[T](block: => T): T = {
     running(FakeApplication(additionalConfiguration = testDatabaseConfig)) {
@@ -51,17 +54,18 @@ trait AppSpecBase extends Specification {
   }
 
   protected def assertJsonResponse(result: Result, responseCode: Int) {
-    contentType(result) must beSome("application/json")
+    def contentAppended(text: String): String =
+      text + "\n%s".format(contentAsString(result))
 
-    status(result) must equalTo(responseCode).setMessage(
-      "'%d' is not equal to '%d'\nContent: %s".format(
-        status(result),
-        responseCode,
-        contentAsString(result)
-      )
-    )
+    contentType(result) must beSome("application/json").updateMessage(contentAppended)
+
+    status(result) must equalTo(responseCode).updateMessage(contentAppended)
   }
 
-  protected def createTestUser: Long =
-    Users.forInsert.insert(TestUser.username, TestUser.password.bcrypt)
+  protected def createTestUser: User = {
+    val username = TestUser.username
+    val password = TestUser.password.bcrypt
+
+    aUser.withUsername(username).withPassword(password).build
+  }
 }
