@@ -26,7 +26,7 @@ class RepSetSpec extends AppSpecBase {
         .build
 
       // Test that a rep set with different exercise is not included in the response
-      val repSet2 = aRepSet.withWeight(50).withReps(12).withUserId(user.id)build
+      val repSet2 = aRepSet.withWeight(50).withReps(12).withUserId(user.id).build
 
       // Test that a rep set with different date is not included in the response
       val repSet3 = aRepSet
