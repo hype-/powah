@@ -6,6 +6,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import powah.exercise.{Exercises, Exercise}
 import powah.test.helpers.{TestUser, AppSpecBase}
+import powah.common.UniqueConstraintException
 
 class ExerciseSpec extends AppSpecBase {
   "ExerciseController" should {
@@ -57,6 +58,26 @@ class ExerciseSpec extends AppSpecBase {
       exercise.name must equalTo("some exercise")
 
       exercise
+    }
+
+    "throws UniqueConstraintException on duplicate exercise" in testApp {
+      createTestUser
+
+      anExercise.withName("duplicate").build
+
+      try {
+        val result = route(FakeRequest(POST, "/exercises")
+          .withHeaders(CONTENT_TYPE -> "application/json")
+          .withSession(TestUser.inSession)
+          .withBody(Json.parse("""{"name": "duplicate"}"""))
+        ).get
+
+        contentAsString(result) must equalTo("this should throw")
+
+        failure("Should have thrown")
+      } catch {
+        case e: UniqueConstraintException => // pass
+      }
     }
   }
 }

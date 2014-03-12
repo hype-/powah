@@ -1,13 +1,15 @@
 package powah.exercise
 
 import com.google.inject.Inject
-import powah.common.DbService
+import powah.common.{UniqueConstraintException, DbService}
 import DbService.driver._
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import powah.user.User
 import scala.slick.jdbc.{GetResult, StaticQuery => Q}
 import Q.interpolation
+import scala.util.{Failure, Try}
+import org.postgresql.util.PSQLException
 
 class ExerciseRepository @Inject()(val db: DbService) {
   def find(id: Long): Option[Exercise] = {
@@ -24,14 +26,16 @@ class ExerciseRepository @Inject()(val db: DbService) {
     }
   }
 
-  def add(input: ExerciseInput): Exercise = {
+  def add(input: ExerciseInput): Try[Exercise] = {
     db.withSession { implicit session =>
       val name = input.name
 
-      Exercise(
-        Exercises.forInsert.insert(name),
-        name
-      )
+      Try(Exercises.forInsert.insert(name))
+        .map(id => Exercise(id, name))
+        .recoverWith {
+          case e: PSQLException =>
+            Failure(UniqueConstraintException.convertFrom(e))
+        }
     }
   }
 

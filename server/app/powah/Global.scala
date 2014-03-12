@@ -21,4 +21,13 @@ object Global extends GlobalSettings {
   override def getControllerInstance[A](clazz: Class[A]) = {
     injector.getInstance(clazz)
   }
+
+  override def onError(request: RequestHeader, ex: Throwable): Result = {
+    ex.getCause match {
+      case e: UniqueConstraintException =>
+        Conflict.withHeaders(CONTENT_TYPE -> JSON)
+
+      case _ => super.onError(request, ex)
+    }
+  }
 }
