@@ -15,7 +15,8 @@ object ApplicationBuild extends Build {
     "postgresql" % "postgresql" % "9.1-901.jdbc4",
     "org.seleniumhq.selenium" % "selenium-server" % "2.33.0" % "test",
     "com.github.t3hnar" % "scala-bcrypt_2.10" % "2.2",
-    "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.1"
+    "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.1",
+    "org.mockito" % "mockito-all" % "1.9.5"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
