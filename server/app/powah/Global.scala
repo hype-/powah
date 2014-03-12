@@ -1,8 +1,14 @@
+package powah
+
+import com.google.inject.Guice
 import play.api.GlobalSettings
 import play.api.Play
 import play.api.Play.current
-import play.api.Application
-import com.google.inject.Guice
+import play.api.http.HeaderNames._
+import play.api.http.MimeTypes._
+import play.api.mvc.Results.Conflict
+import play.api.mvc.{Result, RequestHeader}
+import powah.common.UniqueConstraintException
 
 object Global extends GlobalSettings {
   private lazy val injector = {

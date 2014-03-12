@@ -1,6 +1,7 @@
+package powah
+
 import com.tzavellas.sse.guice.ScalaModule
 import play.api.db.slick.DB
-import scala.slick.session.Database
 
 trait CommonModule extends ScalaModule {
   def configure() {
