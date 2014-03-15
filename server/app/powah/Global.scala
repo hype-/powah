@@ -7,8 +7,9 @@ import play.api.Play.current
 import play.api.http.HeaderNames._
 import play.api.http.MimeTypes._
 import play.api.mvc.Results.Conflict
-import play.api.mvc.{Result, RequestHeader}
+import play.api.mvc.{SimpleResult, RequestHeader}
 import powah.common.UniqueConstraintException
+import scala.concurrent.Future
 
 object Global extends GlobalSettings {
   private lazy val injector = {
@@ -22,10 +23,10 @@ object Global extends GlobalSettings {
     injector.getInstance(clazz)
   }
 
-  override def onError(request: RequestHeader, ex: Throwable): Result = {
+  override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
     ex.getCause match {
       case e: UniqueConstraintException =>
-        Conflict.withHeaders(CONTENT_TYPE -> JSON)
+        Future.successful(Conflict.withHeaders(CONTENT_TYPE -> JSON))
 
       case _ => super.onError(request, ex)
     }

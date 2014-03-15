@@ -1,7 +1,7 @@
 package powah.test.builders
 
 import powah.exercise.{RepSets, RepSet}
-import scala.slick.session.Session
+import scala.slick.jdbc.JdbcBackend.Session
 import org.joda.time.DateTime
 
 case class RepSetBuilder(

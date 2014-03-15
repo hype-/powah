@@ -1,7 +1,7 @@
 package powah.test.builders
 
 import powah.user.{Users, User}
-import scala.slick.session.Session
+import scala.slick.jdbc.JdbcBackend.Session
 
 case class UserBuilder(
   username: Option[String] = None,

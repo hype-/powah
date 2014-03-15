@@ -7,6 +7,7 @@ import play.api.test._
 import powah.exercise.{Exercises, Exercise}
 import powah.test.helpers.{TestUser, AppSpecBase}
 import powah.common.UniqueConstraintException
+import org.specs2.execute.Success
 
 class ExerciseSpec extends AppSpecBase {
   "ExerciseController" should {
@@ -76,7 +77,7 @@ class ExerciseSpec extends AppSpecBase {
 
         failure("Should have thrown")
       } catch {
-        case e: UniqueConstraintException => // pass
+        case e: UniqueConstraintException => Success()
       }
     }
   }

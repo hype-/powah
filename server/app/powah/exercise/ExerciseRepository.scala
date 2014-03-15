@@ -22,7 +22,7 @@ class ExerciseRepository @Inject()(val db: DbService) {
 
   def findAll: Seq[Exercise] = {
     db.withSession { implicit session =>
-      Query(Exercises).list
+      Exercises.list
     }
   }
 

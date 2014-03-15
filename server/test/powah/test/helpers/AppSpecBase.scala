@@ -3,9 +3,10 @@ package powah.test.helpers
 import com.github.t3hnar.bcrypt._
 import org.specs2.mutable._
 import play.api.Play.current
-import play.api.mvc.Result
+import play.api.mvc.SimpleResult
 import powah.user.User
 import powah.test.builders.Builders
+import scala.concurrent.Future
 
 trait AppSpecBase extends Specification with Builders with Finders {
   // Importing here will benefit subclasses too
@@ -13,7 +14,7 @@ trait AppSpecBase extends Specification with Builders with Finders {
   import play.api.test.Helpers._
   import play.api.test._
 
-  private var _session = Option.empty[scala.slick.session.Session]
+  private var _session = Option.empty[scala.slick.jdbc.JdbcBackend.Session]
   protected implicit def session = {
     _session match {
       case Some(s) => s
@@ -53,7 +54,7 @@ trait AppSpecBase extends Specification with Builders with Finders {
     )
   }
 
-  protected def assertJsonResponse(result: Result, responseCode: Int) {
+  protected def assertJsonResponse(result: Future[SimpleResult], responseCode: Int) {
     def contentAppended(text: String): String =
       text + "\n%s".format(contentAsString(result))
 

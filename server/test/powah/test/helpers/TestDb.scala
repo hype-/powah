@@ -19,23 +19,27 @@ trait TestDb {
   }
 
   def createAllTables(s: Session) = {
-    allModels.foreach(_.ddl.create(s))
+    allTables.foreach(_.ddl.create(s))
   }
 
   def dropAllTables(s: Session) = {
     // We need to eventually worry about the correct drop order or temporarily disable FK constraints.
-    for (m <- allModels.reverse) {
-      s.conn.createStatement().execute("DROP TABLE IF EXISTS \"" + m.tableName + "\"")
+    for (table <- allTables.reverse) {
+      s.conn.createStatement().execute(
+        "DROP TABLE IF EXISTS \"" + table.baseTableRow.tableName + "\""
+      )
     }
   }
 
   def truncateAllTables(s: Session) = {
-    for (m <- allModels) {
-      s.conn.createStatement().execute("TRUNCATE \"" + m.tableName + "\" CASCADE")
+    for (table <- allTables) {
+      s.conn.createStatement().execute(
+        "TRUNCATE \"" + table.baseTableRow.tableName + "\" CASCADE"
+      )
     }
   }
 
-  def allModels = Seq(
+  def allTables = Seq(
     Exercises,
     Users,
     RepSets

@@ -5,7 +5,6 @@ import play.api.db.slick.DB
 
 trait CommonModule extends ScalaModule {
   def configure() {
-    bind[DB].toInstance(DB)
   }
 }
 

@@ -1,6 +1,6 @@
 package powah.test.builders
 
-import scala.slick.session.Session
+import scala.slick.jdbc.JdbcBackend.Session
 
 trait Builders {
   def anExercise(implicit s: Session) = new ExerciseBuilder

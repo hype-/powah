@@ -3,7 +3,7 @@ package powah.exercise
 import play.api.db.slick.Config.driver.simple._
 import powah.user.Users
 import org.joda.time.DateTime
-import com.github.tototoshi.slick.JodaSupport._
+import com.github.tototoshi.slick.PostgresJodaSupport._
 
 case class RepSet(
   id: Long,
@@ -22,7 +22,7 @@ case class RepSetOutput(
 
 case class RepSetInput(weight: Float, reps: Int)
 
-object RepSets extends Table[RepSet]("rep_set") {
+class RepSetTable(tag: Tag) extends Table[RepSet](tag, "rep_set") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def weight = column[Float]("weight")
   def reps = column[Int]("reps")
@@ -30,10 +30,14 @@ object RepSets extends Table[RepSet]("rep_set") {
   def userId = column[Long]("user_id")
   def exerciseId = column[Long]("exercise_id")
 
-  def * = id ~ weight ~ reps ~ time ~ userId ~ exerciseId <> (RepSet, RepSet.unapply _)
+  def * = (id, weight, reps, time, userId, exerciseId) <> (RepSet.tupled, RepSet.unapply)
 
   def user = foreignKey("user_fk", userId, Users)(_.id)
   def exercise = foreignKey("exercise_fk", exerciseId, Exercises)(_.id)
+}
 
-  def forInsert = weight ~ reps ~ time ~ userId ~ exerciseId returning id
+object RepSets extends TableQuery(new RepSetTable(_)) {
+  def forInsert = {
+    RepSets.map(rs => (rs.weight, rs.reps, rs.time, rs.userId, rs.exerciseId)) returning RepSets.map(_.id)
+  }
 }

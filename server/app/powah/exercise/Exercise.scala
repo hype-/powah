@@ -12,13 +12,15 @@ case class ExerciseWithRepSetsOutput(id: Long, name: String, repSets: Seq[RepSet
 
 case class ExerciseWithRepSets(id: Long, name: String, repSets: Seq[RepSet])
 
-object Exercises extends Table[Exercise]("exercise") {
+class ExerciseTable(tag: Tag) extends Table[Exercise](tag, "exercise") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name")
 
-  def * = id ~ name <> (Exercise, Exercise.unapply _)
+  def * = (id, name) <> (Exercise.tupled, Exercise.unapply)
 
   def uniqName = index("uniq_name", name, unique = true)
+}
 
-  def forInsert = name returning id
+object Exercises extends TableQuery(new ExerciseTable(_)) {
+  def forInsert = Exercises.map(e => e.name) returning Exercises.map(_.id)
 }

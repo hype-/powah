@@ -1,7 +1,7 @@
 package powah.test.builders
 
 import powah.exercise.{Exercises, Exercise}
-import scala.slick.session.Session
+import scala.slick.jdbc.JdbcBackend.Session
 
 case class ExerciseBuilder(name: Option[String] = None)(implicit s: Session) {
   def withName(name: String): ExerciseBuilder = copy(name = Some(name))

@@ -1,14 +1,12 @@
 package powah.common
 
-import scala.slick.session.Database
 import play.api.db.slick.DB
-import com.google.inject.Inject
-import scala.slick.session.Session
+import scala.slick.jdbc.JdbcBackend.{Database, Session}
 
-class DbService @Inject()(db: DB) {
+class DbService {
   private val currentApp = play.api.Play.current
 
-  def openDatabase(): Database = db.database("default")(currentApp)
+  def openDatabase(): Database = DB("default")(currentApp)
 
   def withSession[A](f: (Session) => A): A = {
     openDatabase().withSession(f)

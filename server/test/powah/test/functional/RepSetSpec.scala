@@ -65,6 +65,19 @@ class RepSetSpec extends AppSpecBase {
       contentAsString(result) must equalTo(expectedJson)
     }
 
+    def assertRepSetWasCreated(user: User, exercise: Exercise): RepSet = {
+      val q = for { r <- RepSets } yield r
+      val repSet = q.first
+
+      repSet.weight must equalTo(50)
+      repSet.reps must equalTo(8)
+      repSet.time must equalTo(new DateTime("2014-08-03"))
+      repSet.exerciseId must equalTo(exercise.id)
+      repSet.userId must equalTo(user.id)
+
+      repSet
+    }
+
     "add a RepSet with Exercise" in testApp {
       val user = createTestUser
 
@@ -96,19 +109,6 @@ class RepSetSpec extends AppSpecBase {
           repSet.id
         )
       )
-    }
-
-    def assertRepSetWasCreated(user: User, exercise: Exercise): RepSet = {
-      val q = for { r <- RepSets } yield r
-      val repSet = q.first
-
-      repSet.weight must equalTo(50)
-      repSet.reps must equalTo(8)
-      repSet.time must equalTo(new DateTime("2014-08-03"))
-      repSet.exerciseId must equalTo(exercise.id)
-      repSet.userId must equalTo(user.id)
-
-      repSet
     }
   }
 }
