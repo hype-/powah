@@ -13,7 +13,7 @@ GET     /exercises                  @powah.exercisemodule.ExerciseController.get
 POST    /exercises                  @powah.exercisemodule.ExerciseController.addExercise
 
 # Rep sets
-POST  /days/$date<\d{4}\-((0[1-9])|(2[0-2]))\-((0[1-9])|(2[0-9])|(3[0-1]))>/exercises/$exerciseId<\d+>/rep_sets  @powah.exercisemodule.RepSetController.addRepSet(date: String, exerciseId: Long)
-GET   /days/$date<\d{4}\-((0[1-9])|(2[0-2]))\-((0[1-9])|(2[0-9])|(3[0-1]))>/exercises  @powah.exercisemodule.RepSetController.getRepSets(date: String)
+POST  /days/$date<\d{4}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([1-2][0-9])|(3[0-1]))>/exercises/$exerciseId<\d+>/rep_sets  @powah.exercisemodule.RepSetController.addRepSet(date: String, exerciseId: Long)
+GET   /days/$date<\d{4}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([1-2][0-9])|(3[0-1]))>/exercises  @powah.exercisemodule.RepSetController.getRepSets(date: String)
 
 GET     /$file<.*\.(js|css)$>       controllers.ExternalAssets.at(path="../client/dist", file)
