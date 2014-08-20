@@ -6,8 +6,7 @@ import DbService.driver._
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import powah.user.User
-import scala.slick.jdbc.{GetResult, StaticQuery => Q}
-import Q.interpolation
+import scala.slick.jdbc.{GetResult, StaticQuery}
 import scala.util.{Failure, Try}
 import org.postgresql.util.PSQLException
 
@@ -52,21 +51,21 @@ class ExerciseRepository @Inject()(val db: DbService) {
       )
 
       implicit val getResult = GetResult(r => Result(
-        r.<<,
-        r.<<,
-        r.<<,
-        r.<<,
-        r.<<,
-        DateTime.parse(r.<<, DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
-        r.<<
+        r.nextLong(),
+        r.nextString(),
+        r.nextLong(),
+        r.nextFloat(),
+        r.nextInt(),
+        DateTime.parse(r.nextString(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")),
+        r.nextLong()
       ))
 
-      val results = Q.query[(String, Long), Result]("""
+      val results = StaticQuery.query[(String, Long), Result]("""
         SELECT e.id, e.name, rs.id, rs.weight, rs.reps, rs.time, rs.user_id FROM exercise e
         INNER JOIN rep_set rs ON e.id = rs.exercise_id
         WHERE TO_CHAR(rs.time, 'YYYY-MM-DD')::DATE = ?::DATE
         AND rs.user_id = ?
-      """).list(date.toString("yyyy-MM-dd"), user.id)
+      """).apply(date.toString("yyyy-MM-dd"), user.id).list
 
       val exercises = results.map(r => Exercise(r.exerciseId, r.exerciseName)).distinct
       val repSets = results.map(r => RepSet(

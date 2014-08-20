@@ -3,7 +3,7 @@ package powah.test.helpers
 import com.github.t3hnar.bcrypt._
 import org.specs2.mutable._
 import play.api.Play.current
-import play.api.mvc.SimpleResult
+import play.api.mvc.Result
 import powah.user.User
 import powah.test.builders.Builders
 import scala.concurrent.Future
@@ -54,7 +54,7 @@ trait AppSpecBase extends Specification with Builders with Finders {
     )
   }
 
-  protected def assertJsonResponse(result: Future[SimpleResult], responseCode: Int) {
+  protected def assertJsonResponse(result: Future[Result], responseCode: Int) {
     def contentAppended(text: String): String =
       text + "\n%s".format(contentAsString(result))
 
