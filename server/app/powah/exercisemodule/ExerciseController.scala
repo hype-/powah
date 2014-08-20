@@ -28,11 +28,14 @@ class ExerciseController @Inject()(exerciseService: ExerciseService)
     }
   }
 
-  def getExercises = AuthenticatedAction { username => implicit request =>
-    val exercises = exerciseService.getAll.map(
-      e => ExerciseOutput(e.id, e.name)
-    )
+  def getExercises(name: Option[String]) = AuthenticatedAction { username => request =>
+    val exercises = name match {
+      case Some(n) => exerciseService.searchByName(n)
+      case None => exerciseService.getAll
+    }
 
-    Ok(Json.toJson(Map("data" -> exercises.map(Json.toJson(_)))))
+    val exerciseOutputs = exercises.map(e => ExerciseOutput(e.id, e.name))
+
+    Ok(Json.toJson(Map("exercises" -> exerciseOutputs.map(Json.toJson(_)))))
   }
 }

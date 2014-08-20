@@ -81,4 +81,12 @@ class ExerciseRepository @Inject()(val db: DbService) {
       exercises.map(e => ExerciseWithRepSets(e.id, e.name, repSets(e.id)))
     }
   }
+
+  def searchByName(name: String): Seq[Exercise] = {
+    db.withSession { implicit session =>
+      val q = for { e <- Exercises if e.name.like(s"%$name%") } yield e
+
+      q.list
+    }
+  }
 }

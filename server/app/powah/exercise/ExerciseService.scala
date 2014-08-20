@@ -15,4 +15,6 @@ class ExerciseService @Inject()(exerciseRepository: ExerciseRepository) {
   def getWithRepSetsForDate(date: DateTime, user: User): Seq[ExerciseWithRepSets] = {
     exerciseRepository.findWithRepSetsForDate(date, user)
   }
+
+  def searchByName(name: String): Seq[Exercise] = exerciseRepository.searchByName(name)
 }

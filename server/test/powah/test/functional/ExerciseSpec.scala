@@ -24,7 +24,7 @@ class ExerciseSpec extends AppSpecBase {
       assertJsonResponse(result, OK)
 
       val expectedJson = Json.parse(
-        """{"data": [{"id": %d, "name": "xoo lus"}]}""".format(exercise.id)
+        """{"exercises": [{"id": %d, "name": "xoo lus"}]}""".format(exercise.id)
       ).toString
 
       contentAsString(result) must equalTo(expectedJson)
@@ -79,6 +79,29 @@ class ExerciseSpec extends AppSpecBase {
       } catch {
         case e: UniqueConstraintException => Success()
       }
+    }
+
+    "be able to search exercises by name" in testApp {
+      createTestUser
+
+      val exercise1 = anExercise.withName("foo bar").build
+
+      // Should be omitted in the response
+      val exercise2 = anExercise.withName("xoo bar").build
+
+      val result = route(
+        FakeRequest(GET, "/exercises?name=foo")
+          .withHeaders(CONTENT_TYPE -> "application/json")
+          .withSession(TestUser.inSession)
+      ).get
+
+      assertJsonResponse(result, OK)
+
+      val expectedJson = Json.parse(
+        """{"exercises": [{"id": %d, "name": "foo bar"}]}""".format(exercise1.id)
+      ).toString
+
+      contentAsString(result) must equalTo(expectedJson)
     }
   }
 }

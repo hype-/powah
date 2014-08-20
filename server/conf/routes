@@ -9,7 +9,7 @@ GET     /                           @powah.commonmodule.ApplicationController.in
 POST    /login                      @powah.usermodule.AuthenticationController.login
 
 # Exercises
-GET     /exercises                  @powah.exercisemodule.ExerciseController.getExercises
+GET     /exercises                  @powah.exercisemodule.ExerciseController.getExercises(name: Option[String])
 POST    /exercises                  @powah.exercisemodule.ExerciseController.addExercise
 
 # Rep sets
