@@ -5,7 +5,7 @@ basePath = '../..';
 files = [
   ANGULAR_SCENARIO,
   ANGULAR_SCENARIO_ADAPTER,
-  'test/integration/**/*.js',
+  'test/integration/**/*.js'
 ];
 
 // frameworks = ['jasmine'];
