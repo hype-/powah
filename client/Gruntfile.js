@@ -8,18 +8,17 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-html2js');
-  grunt.loadNpmTasks('grunt-contrib-coffee');
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'build', 'karma:unit', 'karma:integration']);
-  grunt.registerTask('build', ['clean', 'coffee', 'html2js', 'concat', 'recess:build', 'copy:assets']);
-  grunt.registerTask('release', ['clean', 'coffee', 'html2js', 'uglify', 'jshint', 'karma:unit', 'karma:integration', 'concat:index', 'recess:min', 'copy:assets']);
+  grunt.registerTask('build', ['clean', 'html2js', 'concat', 'recess:build', 'copy:assets']);
+  grunt.registerTask('release', ['clean', 'html2js', 'uglify', 'jshint', 'karma:unit', 'karma:integration', 'concat:index', 'recess:min', 'copy:assets']);
   grunt.registerTask('unit-test-watch', ['karma:unitWatch']);
   grunt.registerTask('integration-test-watch', ['karma:integrationWatch']);
 
   // Print a timestamp (useful for when watching)
   grunt.registerTask('timestamp', function() {
-    grunt.log.subhead(Date());
+    grunt.log.subhead(new Date());
   });
 
   var karmaConfig = function(configFile, customOptions) {
@@ -33,14 +32,14 @@ module.exports = function (grunt) {
     distdir: 'dist',
     pkg: grunt.file.readJSON('package.json'),
     banner:
-    '/*! <%= pkg.name %> - <%= grunt.template.today("yyyy-mm-dd") %> - ' +
-    'Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %> */\n',
+      '/*! <%= pkg.name %> - <%= grunt.template.today("yyyy-mm-dd") %> - ' +
+      'Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %> */\n',
     src: {
-      js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js'],
-      coffee: ['src/**/*.coffee', '<%= distdir %>/templates/**/*.coffee', 'test/unit/**/*.coffee', 'test/integration/**/*.coffee'],
-      specs: ['test/**/*.spec.js'],
-      scenarios: ['test/**/*.scenario.js'],
+      gruntfile: ['Gruntfile.js'],
+      js: ['src/**/*.js'],
+      jsTest: ['test/unit/**/*.js', 'test/integration/**/*.js'],
       html: ['src/index.html', 'test/integration/index.html'],
+      distTpl: ['<%= distdir %>/templates/**/*.js'],
       tpl: {
         app: ['src/app/**/*.tpl.html'],
         common: ['src/common/**/*.tpl.html']
@@ -83,7 +82,7 @@ module.exports = function (grunt) {
         options: {
           banner: "<%= banner %>"
         },
-        src: ['<%= src.js %>'],
+        src: ['<%= src.js %>', '<%= src.distTpl %>'],
         dest: '<%= distdir %>/<%= pkg.name %>.js'
       },
       index: {
@@ -118,7 +117,7 @@ module.exports = function (grunt) {
         options: {
           banner: "<%= banner %>"
         },
-        src: ['<%= src.js %>'],
+        src: ['<%= src.js %>', '<%= src.distTpl %>'],
         dest: '<%= distdir %>/<%= pkg.name %>.js'
       },
       vendor: {
@@ -145,38 +144,18 @@ module.exports = function (grunt) {
         }
       }
     },
-    coffee: {
-      dev: {
-        src: 'src/**/*.coffee',
-        dest: 'src/app/app.js'
-      },
-      unitTest: {
-        expand: true,
-        cwd: 'test/unit',
-        src: ['*.coffee', '**/*.coffee'],
-        dest: 'test/unit',
-        ext: '.js'
-      },
-      integrationTest: {
-        expand: true,
-        cwd: 'test/integration',
-        src: ['*.coffee', '**/*.coffee'],
-        dest: 'test/integration',
-        ext: '.js'
-      }
-    },
     watch: {
       all: {
-        files: ['Gruntfile.js', '<%= src.coffee %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
-        tasks: ['default','timestamp']
+        files: ['<%= src.gruntfile %>', '<%= src.js %>', '<%= src.jsTest %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        tasks: ['default', 'timestamp']
       },
       build: {
-        files: ['Gruntfile.js', '<%= src.coffee %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
-        tasks: ['build','timestamp']
+        files: ['<%= src.gruntfile %>', '<%= src.js %>', '<%= src.jsTest %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        tasks: ['build', 'timestamp']
       }
     },
     jshint: {
-      files: ['Gruntfile.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
+      files: ['<%= src.gruntfile %>', '<%= src.js %>', '<%= src.jsTest %>'],
       options: {
         curly: true,
         eqeqeq: true,
